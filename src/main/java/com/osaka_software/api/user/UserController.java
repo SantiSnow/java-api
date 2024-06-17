@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 import jakarta.validation.Valid;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,6 +83,24 @@ public class UserController {
         userRepository.save(user);
     }
 
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping("/{id}")
+    public void update(@RequestBody User user,@PathVariable Long id){
+        Optional<User> tUser = userRepository.findById(id);
+        if(tUser.isEmpty())
+        {
+            throw new UserNotFoundException();
+        }
+        User existingUser = tUser.get();
+        existingUser.setEmail(user.getEmail());
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setPassword(user.getPassword());
+        existingUser.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(existingUser);
+    }
 
     /**
      * Delete a single record
