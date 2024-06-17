@@ -17,5 +17,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     public User save(User user);
 
-    //public User delete(Long id);
+    public void deleteById(Long id);
 }
